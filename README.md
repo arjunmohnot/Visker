@@ -34,3 +34,15 @@ https://www.youtube.com/watch?v=4S27svxxaw8
 ![Capture6](https://user-images.githubusercontent.com/33459977/56507992-b0cc4480-6540-11e9-8657-759168a19f51.PNG)
 ![Capture7](https://user-images.githubusercontent.com/33459977/56508001-b6298f00-6540-11e9-9b19-9b8d334af8b9.PNG)
 ![Capture8](https://user-images.githubusercontent.com/33459977/56508007-baee4300-6540-11e9-877a-df37bd3aeb2d.PNG)
+
+
+## Some links to study
+
+https://hackernoon.com/visualizing-parts-of-convolutional-neural-networks-using-keras-and-cats-5cc01b214e59
+https://jacobgil.github.io/deeplearning/class-activation-maps
+https://www.oreilly.com/ideas/visualizing-convolutional-neural-networks
+http://yosinski.com/deepvis
+https://marubon-ds.blogspot.com/2018/03/class-activation-map-with-keras.html
+https://www.kaggle.com/amarjeet007/visualize-cnn-with-keras
+https://www.youtube.com/watch?v=RznKVRTFkBY&list=PLZbbT5o_s2xrwRnXk_yCPtnqqo4_u2YGL
+https://www.youtube.com/watch?v=wQ8BIBpya2k&list=PLQVvvaa0QuDfhTox0AjmQ6tvTgMBZBEXN
