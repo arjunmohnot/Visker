@@ -30,24 +30,6 @@ from email.mime.multipart import MIMEMultipart
 from win10toast import ToastNotifier
 from hachoir.parser import createParser
 from hachoir.metadata import extractMetadata
-import sys
-sys.path.insert(0, '/one')
-from one.one import build,path_img,plot_activations
-from one import data123
-from google.cloud import storage
-from firebase import firebase
-import urllib
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'visker-c7e9b-firebase-adminsdk-1uux2-7438cacf30.json'
-firebase=firebase.FirebaseApplication('https://visker-c7e9b.appspot.com/')
-client=storage.Client()
-bucket=client.get_bucket('visker-c7e9b.appspot.com')
-blobs=bucket.list_blobs()
-#storage = firebase.storage()
-#storage.child("images/example.jpg").download("img")
-
-
-
-
 
 
 external_scripts = [
@@ -129,8 +111,7 @@ index_page = html.Div([
             ),
             
             dbc.NavbarToggler(id="navbar-toggler"),
-            dbc.NavItem(dbc.NavLink("Page1", href="/page-1")),
-            dbc.NavItem(dbc.NavLink("Page2", href="/page-2")),
+            dbc.Col(dbc.NavItem(dbc.NavLink("Page", href="/page-1",className="offset-8"))),
           
         ],
         color="dark",      
@@ -505,10 +486,6 @@ def page_1_dropdown(on):
                 engine.setProperty('rate',170)
                 engine.setProperty('volume', 0.9)
                 engine.runAndWait()
-                engine.say("See Intermediate Layers")
-                engine.setProperty('rate',170)
-                engine.setProperty('volume', 0.9)
-                engine.runAndWait()
                 datafr.countvol=0
             return []  
         return []
@@ -573,9 +550,7 @@ def page_1_dropdown(value,on):
                         [
                             dbc.CardTitle("What you want to do ? "),
                             dbc.CardText("Visualize Image ?"),
-                            dcc.Link('Go to Page 1', href='/page-1'),
-                            dbc.CardText("See Intermediate Layers ?"),
-                            dcc.Link('Go to Page 2', href='/page-2'),  
+                            dcc.Link('Go to Page 1', href='/page-1'),  
                         ]
                     )
                 ],
@@ -623,6 +598,12 @@ def page_1_dropdown(value,on):
 
 
 app.config['suppress_callback_exceptions']=True
+buff123 = BytesIO()
+filenames = sorted((fn for fn in os.listdir('.') if fn.endswith('.png')))
+images = []
+for filename in filenames:
+    images.append(imageio.imread(filename))
+imageio.mimsave(buff123, images,duration=0.2,format="GIF")
 
 
 
@@ -648,8 +629,7 @@ page_1_layout = html.Div([
             ),
             
             dbc.NavbarToggler(id="navbar-toggler"),
-            dbc.NavItem(dbc.NavLink("Page1", href="/page-1")),
-            dbc.NavItem(dbc.NavLink("Page2", href="/page-2")),
+            dbc.Col(dbc.NavItem(dbc.NavLink("Page", href="/page-1",className="offset-8"))),
           
         ],
         color="dark",      
@@ -993,7 +973,7 @@ def set_cities_options(value):
         return [html.Div([html.Div([
                             html.Div([html.Div([html.P(str(datafr.loader)+"%",style={'top':'-2px','heigth':'25px','width':'25%','position': 'relative','left': '53%','transform':'translateX(-50%)'})
                             ],style={'background-color': 'orange','width':str(datafr.loader)+"%",'height': '20px','border-radius':'10px'})
-                                                ],style={'background-color':'black','padding':'3px','border-radius': '13px'}),html.P("",style={"margin-bottom":"10px"}),html.P("\ud83d\udcdc Getting Analysed"+psps,style={"margin-bottom":"10px","margin-top":"30px"}),html.P(""),
+                                                ],style={'background-color':'black','padding':'3px','border-radius': '13px'}),html.P("",style={"margin-bottom":"10px"}),html.P("\ud83d\udcdc Getting Analysed"+psps,style={"margin-bottom":"10px","margin-top":"20px"}),html.P(""),
                                       html.Hr(style={'margin-top':'2%','margin-bottom':'6%'})]),],className="ten columns offset-by-one",style={"margin-top":"10px"})]
 
     else:
@@ -1004,13 +984,12 @@ def set_cities_options(value):
             psps='..'
         elif(value%3==0):
             psps='.'
-
-        
         return [html.Div([html.Div([
                             html.Div([html.Div([html.P(str(datafr.loader)+"%",style={'top':'-2px','heigth':'25px','width':'25%','position': 'relative','left': '53%','transform':'translateX(-50%)'})
                             ],style={'background-color': 'orange','width':str(datafr.loader)+"%",'height': '20px','border-radius':'10px'})
-                                                ],style={'background-color':'black','padding':'3px','border-radius': '13px'}),html.P("",style={"margin-bottom":"10px"}),html.P("\ud83d\udcdc Getting Analysed"+psps,style={"margin-bottom":"10px","margin-top":"30px"}),html.P(""),
+                                                ],style={'background-color':'black','padding':'3px','border-radius': '13px'}),html.P("",style={"margin-bottom":"10px"}),html.P("\ud83d\udcdc Getting Analysed"+psps,style={"margin-bottom":"10px","margin-top":"20px"}),html.P(""),
                                       html.Hr(style={'margin-top':'2%','margin-bottom':'6%'})]),],className="ten columns offset-by-one",style={"margin-top":"10px"})]
+
 
 
 
@@ -1040,6 +1019,14 @@ def toggle_collapse(n, is_open):
 def update_output(value):
         return str(datetime.datetime.now().strftime('%H:%M:%S'))
 
+
+def visualize_cat(model, cat):
+    # Keras expects batches of images, so we have to add a dimension to trick it into being nice
+    cat_batch = np.expand_dims(cat,axis=0)
+    conv_cat = model.predict(cat_batch)
+    conv_cat = np.squeeze(conv_cat, axis=0)
+    #print (conv_cat.shape)
+    return conv_cat
 
 
 
@@ -1135,7 +1122,6 @@ def update_graph_interactive_image(content,new_filename,number,knob,email,label)
         
         #print(datafr.d[0][1])
         ac=str(list(datafr.d)[0])
-        datafr.new_filename=new_filename
         try:
             img_data = open('some_image.png', 'rb').read()
             msg = MIMEMultipart()
@@ -1170,25 +1156,13 @@ def update_graph_interactive_image(content,new_filename,number,knob,email,label)
             print('mail error'+str(e))
 
 
-        imageBlob=bucket.blob("images/"+new_filename)
-        imageBlob.upload_from_filename('some_image.png')
-        imageBlob=bucket.blob("gradcam/"+'gradcam_'+datafr.label1+"_"+ac+"_"+new_filename.split(".")[0])
-        imageBlob.upload_from_filename('assets/gradcam.jpg')
-        imageBlob=bucket.blob("guided_backprop/"+'guided_backprop_'+"_"+datafr.label1+"_"+ac+"_"+new_filename.split(".")[0])
-        imageBlob.upload_from_filename('assets/guided_backprop.jpg')
-        imageBlob=bucket.blob("guided_gradcams/"+'guided_gradcam_'+"_"+datafr.label1+"_"+ac+"_"+new_filename.split(".")[0])
-        imageBlob.upload_from_filename('assets/guided_gradcam.jpg')
+
         filename = "some_image.png"
         parser = createParser(filename)
         metadata = extractMetadata(parser)
-        linestring=[]
-        counterline=0
+        linestring=''
         for line in metadata.exportPlaintext():
-            if counterline==0:
-                linestring.append(html.Div([html.H5(line)]))
-                counterline+=1
-            else:
-                linestring.append(html.Div([html.P(line)]))
+            linestring+=line+'\n'
 
         datafr.loader+=10
         try:
@@ -1316,9 +1290,9 @@ def update_graph_interactive_image(content,new_filename,number,knob,email,label)
                         html.Div([
 
                             html.Div([
-                                
-                                html.Div(linestring),
-                                ],className='eight columns'),
+                                html.H5("Metadata 	\ud83d\udcd2"),
+                                linestring
+                                ],className='nine columns'),
                             ],className="six columns"),
 
                         ],className='row'
@@ -1448,7 +1422,7 @@ def update_graph_interactive_image(content,number,label,knob,email):
             img_data = open('some_image.png', 'rb').read()
             msg = MIMEMultipart()
             msg['Subject'] = 'Keras Visualtion Tool Report'
-            tempstring="The probability predicted by the "+datafr.label2+" model are"+str(datafr.d1)
+            tempstring="The probability predicted by the "+datafr.labe12+" model are"+str(datafr.d1)
             text = MIMEText(tempstring)
             msg.attach(text)
             image_data = MIMEImage(img_data, name=os.path.basename('some_image.png'))
@@ -1476,17 +1450,6 @@ def update_graph_interactive_image(content,number,label,knob,email):
             server.quit()
         except Exception as e:
             print('mail error'+str(e))
-
-
-        
-        imageBlob=bucket.blob("gradcam/"+'gradcam_'+datafr.label1+"_"+content+"_"+datafr.new_filename.split(".")[0])
-        imageBlob.upload_from_filename('assets/gradcam.jpg')
-        imageBlob=bucket.blob("guided_backprop/"+'guided_backprop_'+"_"+datafr.label1+content+"_"+datafr.new_filename.split(".")[0])
-        imageBlob.upload_from_filename('assets/guided_backprop.jpg')
-        imageBlob=bucket.blob("guided_gradcams/"+'guided_gradcam_'+"_"+datafr.label1+content+"_"+datafr.new_filename.split(".")[0])
-        imageBlob.upload_from_filename('assets/guided_gradcam.jpg')
-
-        
         datafr.loader+=10
         cardgradcam=dbc.Card(
     [
@@ -1549,8 +1512,8 @@ def update_graph_interactive_image(content,number,label,knob,email):
     ],
     style={"max-width": "250px"},
 )
-        nnn = ToastNotifier() 
         datafr.loader+=10
+        nnn = ToastNotifier() 
         nnn.show_toast("Visker ", "Task is Completed", duration = 5, 
          icon_path ="assets/favicon.ico") 
 
@@ -1631,217 +1594,10 @@ def update_graph_interactive_image(content,new_filename):
          return [html.Img(src='data:image/gif;base64,{}'.format(new_image_string))]
 '''
 
-page_2_layout = html.Div([
-
-    dcc.Interval(id="interval123", interval=1000, n_intervals=0),
-    dbc.Navbar(
-        [
-            html.A(
-                # Use row and col to control vertical alignment of logo / brand
-                dbc.Row(
-                    [
-                        dbc.Col(html.Img(src="assets/keras-logo-small-wb-1.png", height="30px")),
-                        dbc.Col(dbc.NavbarBrand("Visker", className="ml-4")),
-                    ],
-                    align="center",
-                    no_gutters=True,
-                ),
-                href="/",
-            ),
-            
-            dbc.NavbarToggler(id="navbar-toggler"),
-            dbc.NavItem(dbc.NavLink("Page1", href="/page-1")),
-            dbc.NavItem(dbc.NavLink("Page2", href="/page-2")),
-          
-        ],
-        color="dark",      
-        dark=True,
-        sticky="top",
-    ),
-
-    
-        html.Div(id='upload-check-123'),
-
-    html.Div([
-    dbc.Button("Generate Gif 	\ud83d\udc4b", id="submitthree", className="mr-1",color="warning",outline=True,style={"margin-bottom":"5px","margin-top":"5px",'border':"#FFC107 2px solid "}),
-    ],className="ten columns offset-by-one",style={"margin-bottom":"5px"}),
-    html.Div( id='output-images-123',className="ten columns offset-by-one",style={"margin-bottom":"3px"}),
-           html.Div( id='output-image-123',className="ten columns offset-by-one"),
- 
-   
-])
-
-
-
-buff123 = BytesIO()
-def getaddress():
-    try:
-        filenames = sorted((os.getcwd()+'/one/three/'+fn for fn in os.listdir('./one/three') if fn.endswith('.jpg')))
-        images = []
-        for filename in filenames:
-            images.append(imageio.imread(filename))
-        imageio.mimsave(data123.databuff, images,duration=1.1,format="GIF")
-        return 1
-    except Exception as e:
-        print(e)
-        
-        return 0
-
-
-
-def load_images_from_folder(folder):
-    images = []
-    filename_list=[]
-    for filename in os.listdir(folder):
-        filename_list.append(filename)
-        imageFile=os.path.join(folder,filename)
-        with open(imageFile, "rb") as imageFile:
-            img=base64.b64encode(imageFile.read()).decode("utf-8")
-        if img is not None:
-            images.append(img)
-    return images,filename_list
-
-
-
-@app.callback(Output('output-images-123', 'children'),
-              [Input('submitthree', 'n_clicks')])
-def update_graph_interactive_image(content):
-    if data123.third123>=90:
-         data123.flags123=1
-         zz=getaddress()
-         if zz==1:
-             new_image_string = base64.b64encode(data123.databuff.getvalue()).decode("utf-8")
-             return [
-                 html.H5("Output Gif"),
-                 html.Img(src='data:image/gif;base64,{}'.format(new_image_string))]
-         else:
-            return []
-    else:
-        return []
-
-
-
-
-
-
-@app.callback(Output('output-image-123', 'children'),
-              [Input('upload-data-123','contents')],
-              [State('upload-data-123', 'filename')])
-def update_graph_interactive_image(content,new_filename):
-    #print(content,new_filename,number,knob,email,datafr.check1)
-    if (content is not None) and (datafr.check1==1):
-        datafr.load123=1
-        data123.third123=0
-        data123.databuff=BytesIO()
-        data123.flags123=0
-        string = content.split(';base64,')[-1]
-        imgdata = base64.b64decode(string)
-        filename = 'one/two/intermediate.png'  # I assume you have a way of picking unique filenames
-        with open(filename, 'wb') as f:
-            f.write(imgdata)
-            
-        model=build()
-        imagetensor=path_img('one/two/intermediate.png')
-        #print(imagetensor)
-        
-        b=plot_activations(model=model, img_tensor=imagetensor, images_per_row=16, verbose=False, do_postprocess=True)
-        print(b)
-        array,name=load_images_from_folder('one/one')
-        arrays123=[html.H5("Output Layers")]
-        maxwidth=1300
-        data123.third123+=5
-        for i in range(len(array)):
-            namesr=name[i].split(".")
-            namesr=namesr[0]
-            
-            arrays123.append(html.Div([
-
-                
-                dbc.Card(
-                            [
-                                dbc.CardBody(
-                                    [dbc.CardTitle(namesr)]
-                                ),
-                                dbc.CardImg(
-                                    src=(
-                                        'data:image/jpg;base64,{}'.format(array[i])
-                                    )
-                                ),
-                                
-                            ],
-                            style={"max-width": str(maxwidth)},
-                        )
-                                      
-
-
-
-       
-
-
-
-                ],style={"margin-top:":"5px","margin-bottom:":"5px"}))
-            maxwidth-=30
-        datafr.load123=0
-        data123.third123+=5
-        nnn = ToastNotifier() 
-        nnn.show_toast("Visker ", "Task is Completed", duration = 5, 
-         icon_path ="assets/favicon.ico") 
-        return arrays123
-
-
-
-
-@app.callback(
-dash.dependencies.Output('upload-check-123', 'children'),
-[Input('interval123', 'n_intervals')])
-def set_cities_options(value):
-    if datafr.load123==0:
-        return [
-            html.Div([
-            html.H5('Choose Image 	\ud83d\uddc3\ufe0f'),
-            dcc.Upload(
-                    id='upload-data-123',
-                    children=html.Div([
-            'Drag and Drop or ',
-            html.A('Select Files')
-            ,' 	\ud83d\udcc1'
-                    ]),
-                    style={
-                        'width': '100%',
-                        'height': '60px',
-                        'lineHeight': '60px',
-                        'borderWidth': '1px',
-                        'borderStyle': 'dashed',
-                        'borderRadius': '5px',
-                        'textAlign': 'center',
-                        'margin-bottom':'100%',
-                        'margin': '1%'
-                    },
-                    # Allow multiple files to be uploaded
-                   accept='image/*'
-                )],className="ten columns offset-by-one")]
-    elif datafr.load123==1:
-        psps="..."
-        if(value%6==0):
-            psps='...'
-        elif(value%2==0):
-            psps='..'
-        elif(value%3==0):
-            psps='.'
-
-
-        return [html.Div([html.Div([
-                            html.Div([html.Div([html.P(str(data123.third123)+"%",style={'top':'-2px','heigth':'25px','width':'25%','position': 'relative','left': '53%','transform':'translateX(-50%)'})
-                            ],style={'background-color': 'orange','width':str(data123.third123)+"%",'height': '20px','border-radius':'10px'})
-                                                ],style={'background-color':'black','padding':'3px','border-radius': '13px'}),html.P("",style={"margin-bottom":"10px"}),html.P("\ud83d\udcdc Getting Analysed"+psps,style={"margin-bottom":"10px"}),html.P(""),
-                                      html.Hr(style={'margin-top':'2%','margin-bottom':'1%'})]),],className="ten columns offset-by-one",style={"margin-top":"10px"})]
-
-
-
-
-
-
-
+@app.callback(dash.dependencies.Output('page-2-content', 'children'),
+              [dash.dependencies.Input('page-2-radios', 'value')])
+def page_2_radios(value):
+    return 'You have selected "{}"'.format(value)
 
 
 # Update the index
@@ -1856,7 +1612,7 @@ def display_page(pathname):
         return index_page
     # You could also return a 404 "URL not found" page here
 
-wb.open('http://127.0.0.1:8050/')
+
 if __name__ == '__main__':
-    app.run_server(debug=True,threaded=True,host ='0.0.0.0',use_reloader=False)
+    app.run_server(debug=True,host='0.0.0.0')
 
