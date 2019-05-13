@@ -18,3 +18,5 @@ label1=''
 label2=''
 flags1=0
 loader=0
+load123=0
+new_filename=""
