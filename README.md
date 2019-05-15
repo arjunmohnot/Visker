@@ -18,7 +18,7 @@ Original torch implementation: https://github.com/ramprs/grad-cam.
 2.) To visualize the intermediate layers go to Intermediate Layer folder, open cmd and run python Intermediate.py
 
 
-Note- Smtp mail and meta tag scripts are present in the root folder
+Note- SMTP mail and meta tag scripts are present in the root folder
 
 
 ## Youtube Link
@@ -38,11 +38,11 @@ https://www.youtube.com/watch?v=4S27svxxaw8
 
 ## Some links to study
 
-https://hackernoon.com/visualizing-parts-of-convolutional-neural-networks-using-keras-and-cats-5cc01b214e59
-https://jacobgil.github.io/deeplearning/class-activation-maps
-https://www.oreilly.com/ideas/visualizing-convolutional-neural-networks
-http://yosinski.com/deepvis
-https://marubon-ds.blogspot.com/2018/03/class-activation-map-with-keras.html
-https://www.kaggle.com/amarjeet007/visualize-cnn-with-keras
-https://www.youtube.com/watch?v=RznKVRTFkBY&list=PLZbbT5o_s2xrwRnXk_yCPtnqqo4_u2YGL
-https://www.youtube.com/watch?v=wQ8BIBpya2k&list=PLQVvvaa0QuDfhTox0AjmQ6tvTgMBZBEXN
+- [Visualizing part of CNN using Keras and Cats](https://hackernoon.com/visualizing-parts-of-convolutional-neural-networks-using-keras-and-cats-5cc01b214e59)
+- [Class activation maps](https://jacobgil.github.io/deeplearning/class-activation-maps)
+- [Visualizing CNN](https://www.oreilly.com/ideas/visualizing-convolutional-neural-networks)
+- [Deepvis](http://yosinski.com/deepvis)
+- [Classs activation maps with Keras](https://marubon-ds.blogspot.com/2018/03/class-activation-map-with-keras.html)
+- [Visualize CNN with Keras](https://www.kaggle.com/amarjeet007/visualize-cnn-with-keras)
+- [Video: Keras prerequisites](https://www.youtube.com/watch?v=RznKVRTFkBY&list=PLZbbT5o_s2xrwRnXk_yCPtnqqo4_u2YGL)
+- [Video: Deep Learning with Python, TensorFlow, and Keras tutorial](https://www.youtube.com/watch?v=wQ8BIBpya2k&list=PLQVvvaa0QuDfhTox0AjmQ6tvTgMBZBEXN)
