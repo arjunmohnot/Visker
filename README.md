@@ -9,9 +9,12 @@ Original torch implementation: https://github.com/ramprs/grad-cam.
 ![gif](https://user-images.githubusercontent.com/33459977/58111553-4aa21280-7c0f-11e9-98f6-444259074396.gif)
 
 #### GradCam
+![gradcam](https://user-images.githubusercontent.com/33459977/56466257-d5cf9300-642c-11e9-90c6-a2b0dad6b156.jpg)
+
+
 ![Capture](https://user-images.githubusercontent.com/33459977/56507949-95f9d000-6540-11e9-95ce-f0433526f34d.PNG)
 
-![gradcam](https://user-images.githubusercontent.com/33459977/56466257-d5cf9300-642c-11e9-90c6-a2b0dad6b156.jpg)
+
 
 ## Installation
 
@@ -40,7 +43,6 @@ https://www.youtube.com/watch?v=4S27svxxaw8
 ![Capture7](https://user-images.githubusercontent.com/33459977/56508001-b6298f00-6540-11e9-9b19-9b8d334af8b9.PNG)
 ![Capture8](https://user-images.githubusercontent.com/33459977/56508007-baee4300-6540-11e9-877a-df37bd3aeb2d.PNG)
 ### Page 2
-![one](https://user-images.githubusercontent.com/33459977/58111583-5ab9f200-7c0f-11e9-85be-b332d362ab8d.PNG)
 ![two](https://user-images.githubusercontent.com/33459977/58111591-5ee60f80-7c0f-11e9-976e-c8951de9e758.PNG)
 ![three](https://user-images.githubusercontent.com/33459977/58111758-b71d1180-7c0f-11e9-84fe-fad82ddc64b7.PNG)
 ![four](https://user-images.githubusercontent.com/33459977/58111784-bf754c80-7c0f-11e9-90d5-c6bc7e1cec73.PNG)
