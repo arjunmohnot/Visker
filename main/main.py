@@ -34,9 +34,13 @@ import sys
 sys.path.insert(0, '/one')
 from one.one import build,path_img,plot_activations
 from one import data123
-from google.cloud import storage
-from firebase import firebase
+#from google.cloud import storage
+#from firebase import firebase
 import urllib
+
+
+#For firebase no need
+'''
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'visker-c7e9b-firebase-adminsdk-1uux2-7438cacf30.json'
 firebase=firebase.FirebaseApplication('https://visker-c7e9b.appspot.com/')
 client=storage.Client()
@@ -44,7 +48,7 @@ bucket=client.get_bucket('visker-c7e9b.appspot.com')
 blobs=bucket.list_blobs()
 #storage = firebase.storage()
 #storage.child("images/example.jpg").download("img")
-
+'''
 
 
 
@@ -1169,7 +1173,8 @@ def update_graph_interactive_image(content,new_filename,number,knob,email,label)
         except Exception as e:
             print('mail error'+str(e))
 
-
+        #for firebase no need.
+        '''
         imageBlob=bucket.blob("images/"+new_filename)
         imageBlob.upload_from_filename('some_image.png')
         imageBlob=bucket.blob("gradcam/"+'gradcam_'+datafr.label1+"_"+ac+"_"+new_filename.split(".")[0])
@@ -1178,6 +1183,7 @@ def update_graph_interactive_image(content,new_filename,number,knob,email,label)
         imageBlob.upload_from_filename('assets/guided_backprop.jpg')
         imageBlob=bucket.blob("guided_gradcams/"+'guided_gradcam_'+"_"+datafr.label1+"_"+ac+"_"+new_filename.split(".")[0])
         imageBlob.upload_from_filename('assets/guided_gradcam.jpg')
+        '''
         filename = "some_image.png"
         parser = createParser(filename)
         metadata = extractMetadata(parser)
@@ -1478,7 +1484,8 @@ def update_graph_interactive_image(content,number,label,knob,email):
             print('mail error'+str(e))
 
 
-        
+        ##for firebase no need
+        '''
         imageBlob=bucket.blob("gradcam/"+'gradcam_'+datafr.label1+"_"+content+"_"+datafr.new_filename.split(".")[0])
         imageBlob.upload_from_filename('assets/gradcam.jpg')
         imageBlob=bucket.blob("guided_backprop/"+'guided_backprop_'+"_"+datafr.label1+content+"_"+datafr.new_filename.split(".")[0])
@@ -1486,7 +1493,7 @@ def update_graph_interactive_image(content,number,label,knob,email):
         imageBlob=bucket.blob("guided_gradcams/"+'guided_gradcam_'+"_"+datafr.label1+content+"_"+datafr.new_filename.split(".")[0])
         imageBlob.upload_from_filename('assets/guided_gradcam.jpg')
 
-        
+        '''
         datafr.loader+=10
         cardgradcam=dbc.Card(
     [
