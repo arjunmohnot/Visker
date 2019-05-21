@@ -1,9 +1,9 @@
 # Visker
-Visualization Tool For Keras
++ Visualization Tool For Keras
++ Keras implementation of GradCAM.
 
-Keras implementation of GradCAM.
-Adapted and optimized code from https://github.com/jacobgil/keras-grad-cam.
-Original torch implementation: https://github.com/ramprs/grad-cam.
+1. Adapted and optimized code from https://github.com/jacobgil/keras-grad-cam.
+2. Original torch implementation: https://github.com/ramprs/grad-cam.
 
 #### Intermediate Layers
 ![gif](https://user-images.githubusercontent.com/33459977/58111553-4aa21280-7c0f-11e9-98f6-444259074396.gif)
