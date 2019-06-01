@@ -1167,7 +1167,7 @@ def update_graph_interactive_image(content,new_filename,number,knob,email,label)
             except:
                  server = smtplib.SMTP('smtp.gmail.com', 465)
             server.starttls()
-            server.login("visker.keras@gmail.com", "Pass@1234")
+            server.login("#youremail", "#yourpassword")
             server.sendmail(FROM, TO, msg.as_string())
             server.quit()
         except Exception as e:
@@ -1477,7 +1477,7 @@ def update_graph_interactive_image(content,number,label,knob,email):
             except:
                  server = smtplib.SMTP('smtp.gmail.com', 465)
             server.starttls()
-            server.login("visker.keras@gmail.com", "Pass@1234")
+            server.login("#youremail", "#yourpassword")
             server.sendmail(FROM, TO, msg.as_string())
             server.quit()
         except Exception as e:
